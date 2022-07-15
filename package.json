@@ -23,7 +23,10 @@
     "undici": "^4.12.2",
     "vite": "^2.8.6",
     "vite-plugin-inspect": "^0.3.13",
-    "vitest": "^0.6.1"
+    "vitest": "^0.6.1",
+    "autoprefixer": "latest",
+    "postcss": "latest",
+    "tailwindcss": "latest"
   },
   "engines": {
     "node": ">=14"
