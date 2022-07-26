@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "solid-start dev",
     "build": "solid-start build",
-    "run" "nodemon ./dist/index.js",
+    "run": "nodemon ./dist/index.js",
     "start": "solid-start start",
     "postinstall": "node ./scripts/fix-jest-dom.mjs",
     "test": "vitest run"
