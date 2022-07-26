@@ -9,31 +9,33 @@ export const Login = () => {
   const navigate = useNavigate();
   const [serverData] = createResource(true, getServer);
   return (
-    <div class='p-8 w-full h-full flex flex-col items-center justify-center'>
+    <div class='w-full h-full flex flex-col items-center justify-center bg-stone-100'>
       <ErrorBoundary fallback={(err) => <div class='bg-green-100'>{err}</div>}>
-        <ServerBox data={serverData()} />
-        <input
-          placeholder='Nickname...'
-          class='w-48'
-          onInput={(e) => {
-            setText(e.currentTarget.value);
-          }}
-          onkeydown={(e) => {
-            console.log(e.key);
-            if (e.key == 'Enter') {
+        <div class='flex flex-col bg-white shadow-md rounded-lg p-8'>
+          <ServerBox data={serverData()} />
+          <input
+            placeholder='Nickname...'
+            class='w-48'
+            onInput={(e) => {
+              setText(e.currentTarget.value);
+            }}
+            onkeydown={(e) => {
+              console.log(e.key);
+              if (e.key == 'Enter') {
+                setNick(text());
+                navigate('/chat/huone');
+              }
+            }}
+          />
+          <button
+            onClick={() => {
               setNick(text());
               navigate('/chat/huone');
-            }
-          }}
-        />
-        <button
-          onClick={() => {
-            setNick(text());
-            navigate('/chat/huone');
-          }}
-          class='button'>
-          Chat
-        </button>
+            }}
+            class='button'>
+            Chat
+          </button>
+        </div>
       </ErrorBoundary>
     </div>
   );

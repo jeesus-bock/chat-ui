@@ -4,9 +4,10 @@ import Chat from '~/components/Chat';
 
 export default function Room() {
   const [show, setShow] = createSignal(false);
-  const room = createMemo(() => {
+  const chatView = createMemo(() => {
     const pr = useParams();
-    return pr.room;
+    console.log(pr.room);
+    return <Chat />;
   });
   /*createEffect(() => {
     console.log(room());
@@ -16,9 +17,5 @@ export default function Room() {
     }, 5000);
   });*/
 
-  return (
-    <>
-      <Chat />
-    </>
-  );
+  return <>{chatView()}</>;
 }

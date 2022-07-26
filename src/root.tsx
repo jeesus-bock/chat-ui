@@ -13,7 +13,7 @@ export default function Root() {
         <Meta />
         <Links />
       </head>
-      <body class='w-screen h-screen overflow-hidden'>
+      <body class='w-screen h-screen overflow-hidden bg-stone-100'>
         <ErrorBoundary>
           <Suspense>
             <Routes />

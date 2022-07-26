@@ -1,4 +1,4 @@
-import { Component, Show } from 'solid-js';
+import { Component, For, Show } from 'solid-js';
 import { ServerData } from '~/types/dto';
 
 export const ServerBox: Component<{ data: ServerData }> = (p) => {
@@ -12,11 +12,19 @@ export const ServerBox: Component<{ data: ServerData }> = (p) => {
         </div>
         <div class='flex justify-between'>
           <label>Rooms</label>
-          <span>{JSON.stringify(p.data.rooms)}</span>
+          <For each={p.data.rooms.map((u) => u.name)}>
+            {(r) => {
+              return <span>{r}</span>;
+            }}
+          </For>
         </div>
         <div class='flex justify-between'>
           <label>Users</label>
-          <span>{JSON.stringify(p.data.users)}</span>
+          <For each={p.data.users.map((u) => u.nick)}>
+            {(u) => {
+              return <span>{u}</span>;
+            }}
+          </For>
         </div>
       </div>
     </Show>

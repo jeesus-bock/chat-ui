@@ -14,6 +14,6 @@ export interface ServerData {
   type: string;
   url: string;
   voiceUrl: string;
-  users: Map<string, User>;
+  users: Array<User>;
   rooms: Array<Room>;
 }

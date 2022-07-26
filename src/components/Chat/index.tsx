@@ -48,7 +48,10 @@ export default function Chat() {
       msg.msg = msg.msg + ' has left the room.';
     }
     if (msg.type === 'join') {
-      setUsers([...users(), msg.msg]);
+      if (!users().includes(msg.msg)) {
+        console.log('adding user', users, msg);
+        setUsers([...users(), msg.msg]);
+      }
       msg.msg = msg.msg + ' has joined the room';
     }
     setMsgs([...msgs, msg]);
