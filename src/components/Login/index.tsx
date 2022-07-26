@@ -9,7 +9,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const [serverData] = createResource(true, getServer, { deferStream: true });
   createEffect(
-    () => serverData,
+    () => serverData(),
     () => {
       console.log(serverData.loading);
       console.log(serverData());
