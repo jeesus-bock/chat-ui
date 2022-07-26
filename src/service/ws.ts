@@ -1,3 +1,5 @@
+// Originally used the primitive, but it wouldn't work as expected out-of-the-box.
+// So fallen back using bare new WebSocket
 import createWebsocket from '@solid-primitives/websocket';
 import { isServer } from 'solid-js/web';
 export const chatWSUrl = import.meta.env.VITE_CHAT_WS_URL || 'ws://127.0.0.1:9393';
@@ -10,6 +12,7 @@ export interface Msg {
   ts: number;
 }
 
+let ws: WebSocket;
 export let sendWSMsg = (type: string, msg: string) => {
   console.log('shouldnt be running');
 };
@@ -30,7 +33,8 @@ export const initWS = (id: string, room: string, nick: string, rcv: (e: Msg) => 
 
   const wsUrl = chatWSUrl + '/ws/' + id + '/' + room + '?nick=' + nick;
   console.log('ws url', wsUrl);
-  const ws = new WebSocket(wsUrl);
+  if (ws) ws.close();
+  ws = new WebSocket(wsUrl);
   ws.onmessage = (e) => rcv(JSON.parse(e.data));
   sendWSMsg = (type: string, msg: string) => {
     if (!type) {

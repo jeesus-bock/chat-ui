@@ -4,21 +4,11 @@ import Chat from '~/components/Chat';
 
 export default function Room() {
   const [show, setShow] = createSignal(false);
-  const room = createMemo(() => {
+  const chatView = createMemo(() => {
     const pr = useParams();
-    return pr.room;
+    console.log('params', pr);
+    return <Chat />;
   });
-  /*createEffect(() => {
-    console.log(room());
-    setShow(false);
-    setTimeout(() => {
-      setShow(true);
-    }, 5000);
-  });*/
 
-  return (
-    <>
-      <Chat />
-    </>
-  );
+  return <>{chatView()}</>;
 }

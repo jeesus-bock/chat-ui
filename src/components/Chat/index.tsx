@@ -1,7 +1,7 @@
 import { createStore } from 'solid-js/store';
 import { useParams, useNavigate } from 'solid-app-router';
 import { v4 } from 'uuid';
-import { initWS, sendWSMsg } from '~/service/ws';
+import { initWS } from '~/service/ws';
 import type { Msg } from '~/service/ws';
 import { InputBox } from '~/components/InputBox';
 import { Lines } from '~/components/Lines';
@@ -11,6 +11,7 @@ import { TopicBox } from '~/components/TopicBox';
 import { createMemo, createSignal, onMount } from 'solid-js';
 import { nick } from '~/store/store';
 import { UserList } from '~/components/UserList';
+
 export default function Chat() {
   const [msgs, setMsgs] = createStore([] as Array<Msg>);
   const [topic, setTopic] = createSignal('');
@@ -22,6 +23,30 @@ export default function Chat() {
   const room = createMemo(() => {
     const rp = useParams();
     console.log('tässä', rp.room);
+    sendWs = initWS(id, rp.room, nick(), (msg: Msg) => {
+      console.log('Got ws msg', msg);
+      if (msg.type === 'connected') {
+        const data = JSON.parse(msg.msg);
+        setTopic(data.topic);
+        setUsers(data.users || []);
+      }
+      if (msg.type === 'topic') {
+        setTopic(msg.msg);
+        msg.msg = ' changed topic to: ' + msg.msg;
+      }
+      if (msg.type === 'leave') {
+        setUsers(users().filter((u) => u != msg.msg));
+        msg.msg = msg.msg + ' has left the room.';
+      }
+      if (msg.type === 'join') {
+        if (!users().includes(msg.msg)) {
+          console.log('adding user', users, msg);
+          setUsers([...users(), msg.msg]);
+        }
+        msg.msg = msg.msg + ' has joined the room';
+      }
+      setMsgs([...msgs, msg]);
+    });
     return rp.room;
   });
 
@@ -32,7 +57,7 @@ export default function Chat() {
     }
   });
 
-  sendWs = initWS(id, room(), nick(), (msg: Msg) => {
+  /*sendWs = initWS(id, room(), nick(), (msg: Msg) => {
     console.log('Got ws msg', msg);
     if (msg.type === 'connected') {
       const data = JSON.parse(msg.msg);
@@ -48,11 +73,14 @@ export default function Chat() {
       msg.msg = msg.msg + ' has left the room.';
     }
     if (msg.type === 'join') {
-      setUsers([...users(), msg.msg]);
+      if (!users().includes(msg.msg)) {
+        console.log('adding user', users, msg);
+        setUsers([...users(), msg.msg]);
+      }
       msg.msg = msg.msg + ' has joined the room';
     }
     setMsgs([...msgs, msg]);
-  });
+  });*/
 
   return (
     <main class='flex h-full w-full'>
