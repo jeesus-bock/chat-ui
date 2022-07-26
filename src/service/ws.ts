@@ -1,6 +1,6 @@
 import createWebsocket from '@solid-primitives/websocket';
 import { isServer } from 'solid-js/web';
-export const chatApiUrl = import.meta.env.VITE_CHAT_API_URL || 'ws://127.0.0.1:9393';
+export const chatApiUrl = import.meta.env.VITE_CHAT_WS_URL || 'ws://127.0.0.1:9393';
 console.log('api url', chatApiUrl);
 export interface Msg {
   type: string;
