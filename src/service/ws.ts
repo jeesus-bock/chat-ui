@@ -1,7 +1,7 @@
 import createWebsocket from '@solid-primitives/websocket';
 import { isServer } from 'solid-js/web';
-export const chatApiUrl = import.meta.env.VITE_CHAT_WS_URL || 'ws://127.0.0.1:9393';
-console.log('api url', chatApiUrl);
+export const chatWSUrl = import.meta.env.VITE_CHAT_WS_URL || 'ws://127.0.0.1:9393';
+console.log('api url', chatWSUrl);
 export interface Msg {
   type: string;
   from: string;
@@ -28,7 +28,7 @@ export const initWS = (id: string, room: string, nick: string, rcv: (e: Msg) => 
     return () => {};
   }
 
-  const wsUrl = chatApiUrl + '/ws/' + id + '/' + room + '?nick=' + nick;
+  const wsUrl = chatWSUrl + '/ws/' + id + '/' + room + '?nick=' + nick;
   console.log('ws url', wsUrl);
   const ws = new WebSocket(wsUrl);
   ws.onmessage = (e) => rcv(JSON.parse(e.data));
