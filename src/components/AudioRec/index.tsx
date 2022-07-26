@@ -1,5 +1,5 @@
 import { Component, onMount } from 'solid-js';
-import { postImage } from '~/service/post_image';
+import { postVoice } from '~/service/post_voice';
 import { mdiMicrophone } from '@mdi/js';
 
 export const AudioRec: Component<{ room: string; id: string }> = (props) => {
@@ -56,7 +56,7 @@ export const AudioRec: Component<{ room: string; id: string }> = (props) => {
       let formData = new FormData();
       console.log('blob', blob);
       formData.append('document', blob);
-      let res = postImage(props.id, props.room, formData);
+      let res = postVoice(props.id, props.room, formData);
       console.log(res);
     });
   };

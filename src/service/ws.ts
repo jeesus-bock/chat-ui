@@ -1,3 +1,5 @@
+// Originally used the primitive, but it wouldn't work as expected out-of-the-box.
+// So fallen back using bare new WebSocket
 import createWebsocket from '@solid-primitives/websocket';
 import { isServer } from 'solid-js/web';
 export const chatWSUrl = import.meta.env.VITE_CHAT_WS_URL || 'ws://127.0.0.1:9393';
