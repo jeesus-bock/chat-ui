@@ -1,4 +1,5 @@
 import createWebsocket from '@solid-primitives/websocket';
+import { isServer } from 'solid-js/web';
 
 export interface Msg {
   type: string;
@@ -8,27 +9,47 @@ export interface Msg {
   ts: number;
 }
 
-function initWS2(rcv: (e: Msg) => void): (msg: string) => void {
-  const [connect, disconnect, send, state] = createWebsocket(
-    'wss://demo.piesocket.com/v3/channel_1?api_key=oCdCMcMPQpbvNjUIzqtvF1d2X2okWpDQj4AwARJuAgtjhzKxVEjQU6IdCjwm&notify_self',
-    (msg) => rcv(JSON.parse(msg.data)),
-    (msg: Event) => {
-      throw new Error(msg['error']);
-    },
-    [],
-    5,
-    5000
-  );
-  return send;
-}
+export let sendWSMsg = (type: string, msg: string) => {
+  console.log('shouldnt be running');
+};
 
-function initWS(rcv: (e: Msg) => void): (message: string) => void {
+export let dcWs = () => {
+  console.log('shouldnt be running');
+};
+
+export const initWS = (id: string, room: string, nick: string, rcv: (e: Msg) => void): ((type: string, msg: string) => void) => {
+  if (isServer) {
+    console.log("We're on server, do not start websocket2");
+    return () => {};
+  }
+  if (nick == '') {
+    console.log("We're on server, do not start websocket2");
+    return () => {};
+  }
+
+  const wsUrl = 'ws://127.0.0.1:9393/ws/' + id + '/' + room + '?nick=' + nick;
+  console.log('ws url', wsUrl);
+  const ws = new WebSocket(wsUrl);
+  ws.onmessage = (e) => rcv(JSON.parse(e.data));
+  sendWSMsg = (type: string, msg: string) => {
+    if (!type) {
+      type = 'msg';
+    }
+    const msgObj = { type: type, from: id, to: room, msg: msg, ts: Date.now() };
+    console.log('Sending', msgObj);
+    ws.send(JSON.stringify(msgObj));
+  };
+  return sendWSMsg;
+};
+
+export const initMockWS = (room: string, rcv: (e: Msg) => void): ((message: string) => void) => {
   setInterval(() => {
-    const e: Msg = { type: 'msg', from: 'mock_user', to: 'mock_chan', msg: 'This is a test message!', ts: Date.now() };
+    const e: Msg = { type: 'msg', from: 'mock_user', to: room, msg: 'This is a test message!', ts: Date.now() };
     rcv(e);
-  }, 2000);
+  }, 4000);
   const send = (msg: string) => {
     console.log('WS sending msg', msg);
+    rcv({ type: 'msg', from: 'self', to: room, msg: msg, ts: Date.now() });
   };
   return send;
-}
+};

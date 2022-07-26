@@ -1,0 +1,21 @@
+// Vitest Snapshot v1
+
+exports[`<TopixBox /> > renders 1`] = `
+<div>
+  <div
+    class="w-full p-4 border-b border-gray-500 bg-stone-100"
+  >
+    <label
+      data-testid="topic"
+    >
+      <!--#-->
+      #test_room
+      <!--/-->
+       - 
+      <!--#-->
+      Testing topic
+      <!--/-->
+    </label>
+  </div>
+</div>
+`;

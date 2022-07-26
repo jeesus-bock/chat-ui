@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input {
+  @apply p-2 border;
+}
+
+button {
+  @apply py-2 px-4 border border-gray-400 bg-white shadow-md;
+}
+button:active {
+  @apply shadow-none;
+}
+button:hover {
+  @apply border-black;
+}
+
+a.button {
+  @apply py-2 px-4 border bg-white;
+}

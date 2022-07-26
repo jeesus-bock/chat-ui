@@ -13,8 +13,7 @@ export default function Root() {
         <Meta />
         <Links />
       </head>
-      <body>
-        perkele
+      <body class='w-screen h-screen overflow-hidden'>
         <ErrorBoundary>
           <Suspense>
             <Routes />

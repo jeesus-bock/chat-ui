@@ -1,21 +1,21 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
-import { defineConfig } from "vite";
-import solid from "solid-start";
+import { defineConfig } from 'vite';
+import solid from 'solid-start';
 
 export default defineConfig({
   test: {
     globals: true,
-    environment: "jsdom",
+    environment: 'jsdom',
     transformMode: {
       web: [/\.[tj]sx?$/],
     },
-    setupFiles: "./scripts/setup-vitest.ts",
+    setupFiles: './scripts/setup-vitest.ts',
     // solid needs to be inline to work around
     // a resolution issue in vitest:
     deps: {
-      inline: [/solid-js/],
+      inline: [/solid-js/, /solid-testing-library/],
     },
     // if you have few tests, try commenting one
     // or both out to improve performance:
@@ -24,10 +24,10 @@ export default defineConfig({
   },
   plugins: [solid()],
   build: {
-    target: "esnext",
+    target: 'esnext',
     polyfillDynamicImport: false,
   },
   resolve: {
-    conditions: ["development", "browser"],
+    conditions: ['development', 'browser'],
   },
 });

@@ -1,10 +1,5 @@
-import Nav from '~/components/Nav';
-import './index.css';
+import { Login } from '~/components/Login';
 
-export default function Home() {
-  return (
-    <main>
-      <Nav />
-    </main>
-  );
-}
+export default () => {
+  return <Login />;
+};

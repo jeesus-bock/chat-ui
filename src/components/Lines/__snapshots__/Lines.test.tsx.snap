@@ -1,0 +1,49 @@
+// Vitest Snapshot v1
+
+exports[`<Lines /> > renders 1`] = `
+<div>
+  <div
+    class="w-full h-full overflow-y-scroll"
+    data-testid="lines"
+  >
+    <div
+      class="grid _cols_1tvt2_1"
+    >
+      <span
+        data-testid="ts"
+      >
+        10:44:32 PM
+      </span>
+      <span
+        data-testid="from"
+      >
+        mock_user
+      </span>
+      <span
+        data-testid="msg"
+      >
+        This is a test message!
+      </span>
+    </div>
+    <div
+      class="grid _cols_1tvt2_1"
+    >
+      <span
+        data-testid="ts"
+      >
+        1:30:27 AM
+      </span>
+      <span
+        data-testid="from"
+      >
+        mock_user2
+      </span>
+      <span
+        data-testid="msg"
+      >
+        This is a test message2!
+      </span>
+    </div>
+  </div>
+</div>
+`;

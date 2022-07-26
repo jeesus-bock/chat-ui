@@ -1,0 +1,20 @@
+// Vitest Snapshot v1
+
+exports[`<InputBox /> > renders 1`] = `
+<div>
+  <div
+    class="w-full flex bg-stone-200 gap-x-4 p4"
+  >
+    <input
+      class="flex-grow border-stone-600"
+      data-testid="input"
+      placeholder="type a message..."
+    />
+    <button
+      class="mr-4"
+    >
+      Send
+    </button>
+  </div>
+</div>
+`;

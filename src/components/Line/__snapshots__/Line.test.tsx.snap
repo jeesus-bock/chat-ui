@@ -1,0 +1,25 @@
+// Vitest Snapshot v1
+
+exports[`<Line /> > renders 1`] = `
+<div>
+  <div
+    class="grid _cols_1tvt2_1"
+  >
+    <span
+      data-testid="ts"
+    >
+      10:44:32 PM
+    </span>
+    <span
+      data-testid="from"
+    >
+      mock_user
+    </span>
+    <span
+      data-testid="msg"
+    >
+      This is a test message!
+    </span>
+  </div>
+</div>
+`;
