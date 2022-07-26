@@ -1,4 +1,5 @@
 import { Component, onMount } from 'solid-js';
+import { postImage } from '~/service/post_image';
 import { mdiMicrophone } from '@mdi/js';
 
 export const AudioRec: Component<{ room: string; id: string }> = (props) => {
@@ -50,11 +51,12 @@ export const AudioRec: Component<{ room: string; id: string }> = (props) => {
   const stopRec = async () => {
     mediaRecorder.stop();
     setTimeout(async () => {
+      // TODO clean this up, decide on api for api calls
       console.log('starting upload');
       let formData = new FormData();
       console.log('blob', blob);
       formData.append('document', blob);
-      let res = await fetch('http://127.0.0.1:9393/upload/' + props.id + '/' + props.room, { method: 'POST', body: formData });
+      let res = postImage(props.id, props.room, formData);
       console.log(res);
     });
   };

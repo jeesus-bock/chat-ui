@@ -2,8 +2,7 @@
   "name": "sschat",
   "scripts": {
     "dev": "solid-start dev",
-    "build": "solid-start build",
-    "run" "nodemon ./dist/index.js",
+    "build": "VITE_CHAT_API_URL='ws://chatapi.bock.pink' solid-start build",
     "start": "solid-start start",
     "postinstall": "node ./scripts/fix-jest-dom.mjs",
     "test": "vitest run"
