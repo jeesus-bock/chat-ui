@@ -29,7 +29,7 @@ export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) =>
       </svg>
       <Show when={open() == 'user'}>
         <div
-          class='absolute border border-gray-500 bg-gray-100 p-4 right-8 top-8'
+          class='absolute border border-gray-500 bg-gray-100 p-4 right-8 top-8 z-50'
           use:clickOutside={() => {
             setOpen('');
           }}>
@@ -45,7 +45,7 @@ export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) =>
       </Show>
       <Show when={open() == 'cog'}>
         <div
-          class='absolute border border-gray-500 bg-gray-100 p-4 right-8 top-8'
+          class='absolute border border-gray-500 bg-gray-100 p-4 right-8 top-8 z-50'
           use:clickOutside={() => {
             setOpen('');
           }}>
