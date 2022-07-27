@@ -36,7 +36,7 @@ export default function Chat() {
   };
   const filteredMsgs = createMemo(() => {
     // only show messages to given room, this could be prettier.
-    return msgs.filter((msg) => (msg.to = room()));
+    return msgs.filter((msg) => msg.to === room());
   });
   // room memo also gives sendWs a new value, ie the sending function
   // for the room that was just joined (the memo triggers on path param change)
