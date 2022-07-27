@@ -6,7 +6,7 @@ export const Sidebar: Component<{ data: ServerData }> = (props) => {
   const [newChan, setNewChan] = createSignal('');
   const navigate = useNavigate();
   return (
-    <nav class='flex flex-col bg-zinc-100 border-r border-zinc-500 min-h-screen'>
+    <nav class='hidden sm:flex flex-col bg-zinc-100 border-r border-zinc-500 min-h-screen'>
       <Show when={!!props.data}>
         <For each={props.data.rooms}>
           {(r) => {

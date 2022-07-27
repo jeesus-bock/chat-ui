@@ -1,6 +1,7 @@
 import { Component, createSignal, Show } from 'solid-js';
 import { mdiAccount, mdiCog } from '@mdi/js';
 import { Portal } from 'solid-js/web';
+import { clickOutside } from '~/directives/click-outside';
 import { Modal } from '../Modal';
 import { ChangeNick } from '../Modal/content/ChangeNick';
 import { ChangeTopic } from '../Modal/content/ChangeTopic';
@@ -10,7 +11,7 @@ import { SendWs, ServerData } from '~/types';
 export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) => {
   const [open, setOpen] = createSignal('');
   const [modal, setModal] = createSignal('');
-
+  console.log(clickOutside);
   const toggle = (menu: string) => {
     if (open() === menu) {
       setOpen('');
@@ -27,7 +28,11 @@ export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) =>
         <path d={mdiCog} />
       </svg>
       <Show when={open() == 'user'}>
-        <div class='absolute border border-gray-500 bg-gray-100 p-4 right-8 top-8'>
+        <div
+          class='absolute border border-gray-500 bg-gray-100 p-4 right-8 top-8'
+          use:clickOutside={() => {
+            setOpen('');
+          }}>
           <button
             class='whitespace-nowrap'
             onClick={() => {
@@ -39,7 +44,11 @@ export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) =>
         </div>
       </Show>
       <Show when={open() == 'cog'}>
-        <div class='absolute border border-gray-500 bg-gray-100 p-4 right-8 top-8'>
+        <div
+          class='absolute border border-gray-500 bg-gray-100 p-4 right-8 top-8'
+          use:clickOutside={() => {
+            setOpen('');
+          }}>
           <ServerBox data={props.data} />
           <button
             class='whitespace-nowrap'

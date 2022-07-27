@@ -30,14 +30,14 @@ export const Login = () => {
               console.log(e.key);
               if (e.key == 'Enter') {
                 setNick(text());
-                navigate('/chat/huone');
+                navigate('/chat/main');
               }
             }}
           />
           <button
             onClick={() => {
               setNick(text());
-              navigate('/chat/huone');
+              navigate('/chat/main');
             }}
             class='button'>
             Chat

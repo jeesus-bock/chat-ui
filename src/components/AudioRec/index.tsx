@@ -49,8 +49,10 @@ export const AudioRec: Component<{ room: string; id: string }> = (props) => {
   return (
     <>
       <Show when={mediaRecorder()}>
-        <IconButton icon={mdiRecord} disabled={recording()} onClick={() => mediaRecorder().start()} />
-        <IconButton icon={mdiStop} disabled={!recording()} onClick={() => mediaRecorder().stop()} />
+        <div class='self-end flex gap-x-4 justify-end mt-4 sm:mt-0'>
+          <IconButton icon={mdiRecord} disabled={recording()} onClick={() => mediaRecorder().start()} />
+          <IconButton icon={mdiStop} disabled={!recording()} onClick={() => mediaRecorder().stop()} />
+        </div>
       </Show>
     </>
   );

@@ -85,7 +85,7 @@ export default function Chat() {
   return (
     <main class='flex h-full w-full'>
       <Sidebar data={serverData()} />
-      <div class='flex flex-col flex-grow h-full'>
+      <div class='flex flex-col flex-grow h-full w-full overflow-hidden'>
         <TopicBox room={room()} topic={topic()} data={serverData()} send={getSendWs()} />
         <Lines msgs={filteredMsgs()} />
         <InputBox room={room()} id={id} send={getSendWs()} />
