@@ -5,7 +5,16 @@ export const ChangeTopic: Component<{ close: () => void; send: SendWs }> = (p) =
   return (
     <div class='flex flex-col w-96'>
       <label class='mb-4'>Change topic</label>
-      <input class='w-full mb-4' onInput={(e) => setTopic(e.currentTarget.value)} />
+      <input
+        class='w-full mb-4'
+        onInput={(e) => setTopic(e.currentTarget.value)}
+        onkeydown={(e) => {
+          if (e.key == 'Enter') {
+            p.send('topic', topic());
+            p.close();
+          }
+        }}
+      />
       <div class='flex justify-end w-full gap-x-4'>
         <button onClick={() => p.close()}>Cancel</button>
         <button
