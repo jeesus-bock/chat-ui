@@ -36,10 +36,11 @@ export default function Chat() {
   };
   const filteredMsgs = createMemo(() => {
     // only show messages to given room, this could be prettier.
-    return msgs.filter((msg) => (msg.to = room()));
+    return msgs.filter((msg) => msg.to === room());
   });
   // room memo also gives sendWs a new value, ie the sending function
   // for the room that was just joined (the memo triggers on path param change)
+  // Maybe use an effect for this...
   const room = createMemo(() => {
     const rp = useParams();
     sendWs = initWS(id, rp.room, nick(), (msg: Msg) => {
@@ -84,7 +85,7 @@ export default function Chat() {
   return (
     <main class='flex h-full w-full'>
       <Sidebar data={serverData()} />
-      <div class='flex flex-col flex-grow h-full'>
+      <div class='flex flex-col flex-grow h-full w-full overflow-hidden'>
         <TopicBox room={room()} topic={topic()} data={serverData()} send={getSendWs()} />
         <Lines msgs={filteredMsgs()} />
         <InputBox room={room()} id={id} send={getSendWs()} />

@@ -1,11 +1,11 @@
-import { Component, onMount } from 'solid-js';
+import { Component, createSignal, onMount, Show } from 'solid-js';
 import { postVoice } from '~/service/post_voice';
-import { mdiMicrophone } from '@mdi/js';
+import { mdiRecord, mdiStop } from '@mdi/js';
+import { IconButton } from '../IconButton';
 
 export const AudioRec: Component<{ room: string; id: string }> = (props) => {
-  let mediaRecorder;
-  let blob: Blob;
-  let audio;
+  const [mediaRecorder, setMediaRecorder] = createSignal(null as MediaRecorder);
+  const [recording, setRecording] = createSignal(false);
 
   onMount(() => {
     if (navigator.mediaDevices) {
@@ -13,32 +13,30 @@ export const AudioRec: Component<{ room: string; id: string }> = (props) => {
 
       const constraints = { audio: true };
       let chunks = [];
+      // TODO: Change this to aync/await
       navigator.mediaDevices
         .getUserMedia(constraints)
         .then(function (stream) {
           console.log('Got the media stream', stream);
-          mediaRecorder = new MediaRecorder(stream);
+          setMediaRecorder(new MediaRecorder(stream));
+          mediaRecorder().onstart = () => {
+            setRecording(true);
+          };
+          mediaRecorder().onstop = async (e) => {
+            console.log('mediaRecorder().onstop');
 
-          mediaRecorder.onstop = function (e) {
-            console.log('data available after MediaRecorder.stop() called.');
-
-            audio.setAttribute('controls', '');
-            audio.controls = true;
-            blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
-            console.log('blob in then()', blob);
+            const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
             chunks = [];
-            const audioURL = URL.createObjectURL(blob);
-            audio.src = audioURL;
-            console.log('recorder stopped');
-            console.log('starting upload');
+            // Create the formdata file object from the recorded stream
             let formData = new FormData();
             console.log('blob', blob);
             formData.append('document', blob);
-            let res = postVoice(props.id, props.room, formData);
+            let res = await postVoice(props.id, props.room, formData);
             console.log(res);
+            setRecording(false);
           };
 
-          mediaRecorder.ondataavailable = function (e) {
+          mediaRecorder().ondataavailable = (e) => {
             chunks.push(e.data);
           };
         })
@@ -48,28 +46,14 @@ export const AudioRec: Component<{ room: string; id: string }> = (props) => {
     }
   });
 
-  // TODO clean debug cruft
-  const startRec = () => {
-    mediaRecorder.start();
-    console.log(mediaRecorder.state);
-    console.log('recorder started');
-  };
-  const stopRec = async () => {
-    mediaRecorder.stop();
-  };
   return (
     <>
-      <button class='flex items-center justify-center h-10 w-10 p-0' onClick={startRec}>
-        <svg class='h-6 w-6 hover:fill-slate-400 cursor-pointer'>
-          <path d={mdiMicrophone} />
-        </svg>
-      </button>
-      <button class='flex items-center justify-center h-10 w-10 p-0 bg-red-200' onClick={stopRec}>
-        <svg class='h-6 w-6 hover:fill-slate-400 cursor-pointer'>
-          <path d={mdiMicrophone} />
-        </svg>
-      </button>
-      <audio ref={audio} />
+      <Show when={mediaRecorder()}>
+        <div class='self-end flex gap-x-4 justify-end mt-4 sm:mt-0'>
+          <IconButton icon={mdiRecord} disabled={recording()} onClick={() => mediaRecorder().start()} />
+          <IconButton icon={mdiStop} disabled={!recording()} onClick={() => mediaRecorder().stop()} />
+        </div>
+      </Show>
     </>
   );
 };

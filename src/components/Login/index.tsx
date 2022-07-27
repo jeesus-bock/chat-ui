@@ -2,7 +2,7 @@ import { useNavigate } from 'solid-app-router';
 import { createEffect, createResource, createSignal, ErrorBoundary } from 'solid-js';
 import { getServer } from '~/service/get_server';
 import { setNick } from '~/store/store';
-import { ServerBox } from '../ServerBox';
+import { ServerBox } from '~/components/ServerBox/';
 export const Login = () => {
   console.log('login here');
   const [text, setText] = createSignal('');
@@ -30,14 +30,14 @@ export const Login = () => {
               console.log(e.key);
               if (e.key == 'Enter') {
                 setNick(text());
-                navigate('/chat/huone');
+                navigate('/chat/main');
               }
             }}
           />
           <button
             onClick={() => {
               setNick(text());
-              navigate('/chat/huone');
+              navigate('/chat/main');
             }}
             class='button'>
             Chat
