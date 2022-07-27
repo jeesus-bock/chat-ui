@@ -40,6 +40,7 @@ export default function Chat() {
   });
   // room memo also gives sendWs a new value, ie the sending function
   // for the room that was just joined (the memo triggers on path param change)
+  // Maybe use an effect for this...
   const room = createMemo(() => {
     const rp = useParams();
     sendWs = initWS(id, rp.room, nick(), (msg: Msg) => {
