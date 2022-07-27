@@ -30,6 +30,12 @@ export const AudioRec: Component<{ room: string; id: string }> = (props) => {
             const audioURL = URL.createObjectURL(blob);
             audio.src = audioURL;
             console.log('recorder stopped');
+            console.log('starting upload');
+            let formData = new FormData();
+            console.log('blob', blob);
+            formData.append('document', blob);
+            let res = postVoice(props.id, props.room, formData);
+            console.log(res);
           };
 
           mediaRecorder.ondataavailable = function (e) {
@@ -41,6 +47,8 @@ export const AudioRec: Component<{ room: string; id: string }> = (props) => {
         });
     }
   });
+
+  // TODO clean debug cruft
   const startRec = () => {
     mediaRecorder.start();
     console.log(mediaRecorder.state);
@@ -48,13 +56,6 @@ export const AudioRec: Component<{ room: string; id: string }> = (props) => {
   };
   const stopRec = async () => {
     mediaRecorder.stop();
-    // TODO clean this up, decide on api for api calls
-    console.log('starting upload');
-    let formData = new FormData();
-    console.log('blob', blob);
-    formData.append('document', blob);
-    let res = postVoice(props.id, props.room, formData);
-    console.log(res);
   };
   return (
     <>
