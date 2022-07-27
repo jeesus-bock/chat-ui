@@ -17,3 +17,5 @@ export interface ServerData {
   users: Array<User>;
   rooms: Array<Room>;
 }
+
+export type SendWs = (type: string, msg: string) => void;

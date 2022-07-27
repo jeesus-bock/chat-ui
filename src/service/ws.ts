@@ -13,22 +13,15 @@ export interface Msg {
 }
 
 let ws: WebSocket;
-export let sendWSMsg = (type: string, msg: string) => {
-  console.log('shouldnt be running');
-};
-
-export let dcWs = () => {
-  console.log('shouldnt be running');
-};
 
 export const initWS = (id: string, room: string, nick: string, rcv: (e: Msg) => void): ((type: string, msg: string) => void) => {
   console.log('initing ws, room', room);
   if (isServer) {
-    console.log("We're on server, do not start websocket2");
+    console.log("We're on server, do not start websocket");
     return () => {};
   }
   if (nick == '') {
-    console.log("We're on server, do not start websocket2");
+    console.log('No nick set, do not start websocket');
     return () => {};
   }
 
@@ -37,7 +30,7 @@ export const initWS = (id: string, room: string, nick: string, rcv: (e: Msg) => 
   if (ws) ws.close();
   ws = new WebSocket(wsUrl);
   ws.onmessage = (e) => rcv(JSON.parse(e.data));
-  sendWSMsg = (type: string, msg: string) => {
+  const sendWSMsg = (type: string, msg: string) => {
     console.log('sendingWSMsg, room', room);
     if (!type) {
       type = 'msg';
@@ -49,6 +42,7 @@ export const initWS = (id: string, room: string, nick: string, rcv: (e: Msg) => 
   return sendWSMsg;
 };
 
+// Possibly usable for testing etc purposes
 export const initMockWS = (room: string, rcv: (e: Msg) => void): ((message: string) => void) => {
   setInterval(() => {
     const e: Msg = { type: 'msg', from: 'mock_user', to: room, msg: 'This is a test message!', ts: Date.now() };

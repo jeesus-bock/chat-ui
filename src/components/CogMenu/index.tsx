@@ -4,8 +4,10 @@ import { Portal } from 'solid-js/web';
 import { Modal } from '../Modal';
 import { ChangeNick } from '../Modal/content/ChangeNick';
 import { ChangeTopic } from '../Modal/content/ChangeTopic';
+import { ServerBox } from '../ServerBox';
+import { SendWs, ServerData } from '~/types';
 
-export const CogMenu: Component = () => {
+export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) => {
   const [open, setOpen] = createSignal('');
   const [modal, setModal] = createSignal('');
 
@@ -38,6 +40,7 @@ export const CogMenu: Component = () => {
       </Show>
       <Show when={open() == 'cog'}>
         <div class='absolute border border-gray-500 bg-gray-100 p-4 right-8 top-8'>
+          <ServerBox data={props.data} />
           <button
             class='whitespace-nowrap'
             onClick={() => {
@@ -56,6 +59,7 @@ export const CogMenu: Component = () => {
                 close={() => {
                   setModal('');
                 }}
+                send={props.send}
               />
             }
           />
@@ -69,6 +73,7 @@ export const CogMenu: Component = () => {
                 close={() => {
                   setModal('');
                 }}
+                send={props.send}
               />
             }
           />

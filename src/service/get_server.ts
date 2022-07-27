@@ -1,3 +1,4 @@
+import { createResource, createEffect } from 'solid-js';
 export const chatApiUrl = import.meta.env.VITE_CHAT_API_URL || 'http://127.0.0.1:9393';
 
 // Fetches the server data object

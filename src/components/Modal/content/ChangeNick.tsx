@@ -1,6 +1,6 @@
 import { Component, createSignal } from 'solid-js';
-import { sendWSMsg } from '~/service/ws';
-export const ChangeNick: Component<{ close: () => void }> = (p) => {
+import { SendWs } from '~/types';
+export const ChangeNick: Component<{ close: () => void; send: SendWs }> = (p) => {
   const [nick, setNick] = createSignal('');
   return (
     <div class='flex flex-col'>
@@ -10,7 +10,7 @@ export const ChangeNick: Component<{ close: () => void }> = (p) => {
         <button onClick={() => p.close()}>Cancel</button>
         <button
           onClick={() => {
-            sendWSMsg('nick', nick());
+            p.send('nick', nick());
             p.close();
           }}>
           OK
