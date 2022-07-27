@@ -4,7 +4,7 @@ import { Portal } from 'solid-js/web';
 import { Modal } from '../Modal';
 import { ChangeNick } from '../Modal/content/ChangeNick';
 import { ChangeTopic } from '../Modal/content/ChangeTopic';
-import { ServerBox } from '../ServerBox';
+import { ServerBox } from '~/components/ServerBox/';
 import { SendWs, ServerData } from '~/types';
 
 export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) => {

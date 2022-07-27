@@ -36,7 +36,7 @@ export const Line: Component<{ msg: Msg }> = (p) => {
         </div>
       </Match>
       <Match when={p.msg.type == 'voice'}>
-        <div class='flex gap-4 items-center'>
+        <div class='flex gap-4 items-center pl-4'>
           <label>{getAudioLabel(p.msg.msg)}</label>
           <audio controls>
             <source src={p.msg.msg} type='audio/ogg' />
