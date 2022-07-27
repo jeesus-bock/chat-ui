@@ -32,7 +32,7 @@ export const Line: Component<{ msg: Msg }> = (p) => {
       }>
       <Match when={p.msg.type == 'connected'}>
         <div class='p-4'>
-          --- CONNECTED TO <span class='font-bold'>{p.msg.to}</span> ---
+          --- CONNECTED TO <span class='font-bold'>{decodeURI(p.msg.to)}</span> ---
         </div>
       </Match>
       <Match when={p.msg.type == 'voice'}>

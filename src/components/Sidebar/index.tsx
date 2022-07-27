@@ -11,8 +11,8 @@ export const Sidebar: Component<{ data: ServerData }> = (props) => {
         <For each={props.data.rooms}>
           {(r) => {
             return (
-              <Link href={'/chat/' + r.name} class='pt-2 pb-1 px-4'>
-                {r.name}
+              <Link href={'/chat/' + decodeURI(r.name)} class='pt-2 pb-1 px-4'>
+                {decodeURI(r.name)}
               </Link>
             );
           }}
