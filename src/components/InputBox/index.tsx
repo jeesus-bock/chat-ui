@@ -18,6 +18,7 @@ export const InputBox: Component<{ room: string; id: string; send: (type: string
             setText('');
           }
         }}
+        value={text()}
       />
       <button
         class='mr-4'
