@@ -1,5 +1,5 @@
 // @refresh reload
-import { Links, Meta, Routes, Scripts } from 'solid-start/root';
+import { Links, Meta, FileRoutes, Scripts } from 'solid-start/root';
 import { ErrorBoundary } from 'solid-start/error-boundary';
 import { Suspense } from 'solid-js';
 import './tailwind.css';
@@ -16,7 +16,7 @@ export default function Root() {
       <body class='w-full h-full overflow-hidden bg-stone-100'>
         <ErrorBoundary>
           <Suspense>
-            <Routes />
+            <FileRoutes />
           </Suspense>
         </ErrorBoundary>
         <Scripts />
