@@ -22,6 +22,7 @@ export let dcWs = () => {
 };
 
 export const initWS = (id: string, room: string, nick: string, rcv: (e: Msg) => void): ((type: string, msg: string) => void) => {
+  console.log('initing ws, room', room);
   if (isServer) {
     console.log("We're on server, do not start websocket2");
     return () => {};
@@ -37,6 +38,7 @@ export const initWS = (id: string, room: string, nick: string, rcv: (e: Msg) => 
   ws = new WebSocket(wsUrl);
   ws.onmessage = (e) => rcv(JSON.parse(e.data));
   sendWSMsg = (type: string, msg: string) => {
+    console.log('sendingWSMsg, room', room);
     if (!type) {
       type = 'msg';
     }
