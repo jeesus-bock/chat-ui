@@ -9,24 +9,16 @@ import { Lines } from '~/components/Lines';
 import { Sidebar } from '~/components/Sidebar';
 import { TopicBox } from '~/components/TopicBox';
 
-import { createMemo, createSignal, createResource, createEffect, onMount } from 'solid-js';
-import { store, setStore } from '~/store/store';
+import { createMemo, createSignal, createEffect, onMount } from 'solid-js';
+import { store } from '~/store/store';
 import { UserList } from '~/components/UserList';
 
 export default function Chat() {
   const [msgs, setMsgs] = createStore([] as Array<Msg>);
   const [topic, setTopic] = createSignal('');
   const [users, setUsers] = createSignal([]);
-  const [serverData] = createResource(getServer);
-  createEffect(
-    () => serverData(),
-    () => {
-      console.log('serverData.loading', serverData.loading);
-      console.log('serverData()', serverData());
-      setStore({ ...store, serverData: serverData() });
-    }
-  );
   const id = v4();
+  const rp = useParams();
   let sendWs = (type: string, msg: string) => {
     // Debug code to understand the reactivity.
     console.log('empty send', type, msg);
@@ -43,7 +35,10 @@ export default function Chat() {
   // for the room that was just joined (the memo triggers on path param change)
   // Maybe use an effect for this...
   const room = createMemo(() => {
-    const rp = useParams();
+    console.log('Memo returning room', rp.room);
+    return rp.room;
+  });
+  createEffect(() => {
     sendWs = initWS(id, rp.room, store.nick, (msg: Msg) => {
       console.log('Got ws msg', msg);
       if (msg.type === 'connected') {
@@ -70,7 +65,6 @@ export default function Chat() {
       }
       setMsgs([...msgs, msg]);
     });
-    return rp.room;
   });
 
   // initialize the navigator to jump back to / if the nick isn't set
@@ -86,9 +80,9 @@ export default function Chat() {
 
   return (
     <main class='flex h-full w-full'>
-      <Sidebar data={store.serverData} />
+      <Sidebar />
       <div class='flex flex-col flex-grow h-full w-full overflow-hidden'>
-        <TopicBox room={room()} topic={topic()} data={store.serverData} send={getSendWs()} />
+        <TopicBox room={room()} topic={topic()} send={getSendWs()} />
         <Lines msgs={filteredMsgs()} />
         <InputBox room={room()} id={id} send={getSendWs()} />
       </div>

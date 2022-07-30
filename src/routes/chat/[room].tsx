@@ -1,14 +1,6 @@
-import { createEffect, createMemo, createSignal, Show } from 'solid-js';
-import { useParams } from 'solid-app-router';
 import Chat from '~/components/Chat';
 
+// Very basic view, maybe add conditional page about room info or something here later.
 export default function Room() {
-  const [show, setShow] = createSignal(false);
-  const chatView = createMemo(() => {
-    const pr = useParams();
-    console.log('params', pr);
-    return <Chat />;
-  });
-
-  return <>{chatView()}</>;
+  return <Chat />;
 }

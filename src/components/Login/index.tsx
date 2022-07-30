@@ -1,21 +1,25 @@
 import { useNavigate } from 'solid-app-router';
-import { createEffect, createResource, createSignal, ErrorBoundary } from 'solid-js';
-import { getServer } from '~/service/get_server';
+import { createSignal, ErrorBoundary } from 'solid-js';
 import { store, setStore } from '~/store/store';
 import { ServerBox } from '~/components/ServerBox/';
+import { trimName } from '~/utils/names';
+import { produce } from 'solid-js/store';
 export const Login = () => {
-  console.log('login here');
-  const [text, setText] = createSignal('');
+  console.log('Login here');
+  const [nick, setNick] = createSignal('');
   const navigate = useNavigate();
-  const [serverData] = createResource(true, getServer, { deferStream: true });
-  createEffect(
-    () => serverData,
-    () => {
-      console.log(serverData.loading);
-      setStore({ ...store, serverData: serverData() });
-      console.log('store', store);
-    }
-  );
+  const trimAndSetNick = (n: string) => {
+    console.log('trimmed', trimName(n));
+    setNick(trimName(n));
+  };
+  const login = () => {
+    setStore(
+      produce((s) => {
+        s.nick = nick();
+      })
+    );
+    navigate('/chat/main');
+  };
   return (
     <div class='w-full h-full flex flex-col items-center justify-center bg-stone-100'>
       <ErrorBoundary fallback={(err) => <div class='bg-green-100'>{err}</div>}>
@@ -25,21 +29,20 @@ export const Login = () => {
             autofocus
             placeholder='Nickname...'
             class='w-48 max-w-full my-4'
+            value={nick()}
             onInput={(e) => {
-              setText(e.currentTarget.value);
+              trimAndSetNick(e.currentTarget.value);
             }}
             onkeydown={(e) => {
               console.log(e.key);
               if (e.key == 'Enter') {
-                setStore({ ...store, nick: text() });
-                navigate('/chat/main');
+                login();
               }
             }}
           />
           <button
             onClick={() => {
-              setStore({ ...store, nick: text() });
-              navigate('/chat/main');
+              login();
             }}
             class='button justify-self-end self-end'>
             Chat

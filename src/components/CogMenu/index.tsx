@@ -2,13 +2,14 @@ import { Component, createSignal, Show } from 'solid-js';
 import { mdiAccount, mdiCog } from '@mdi/js';
 import { Portal } from 'solid-js/web';
 import { clickOutside } from '~/directives/click-outside';
+import { store } from '~/store/store';
 import { Modal } from '../Modal';
 import { ChangeNick } from '../Modal/content/ChangeNick';
 import { ChangeTopic } from '../Modal/content/ChangeTopic';
 import { ServerBox } from '~/components/ServerBox/';
-import { SendWs, ServerData } from '~/types';
+import { SendWs } from '~/types';
 
-export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) => {
+export const CogMenu: Component<{ send: SendWs }> = (props) => {
   const [open, setOpen] = createSignal('');
   const [modal, setModal] = createSignal('');
   console.log(clickOutside);
@@ -49,7 +50,7 @@ export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) =>
           use:clickOutside={() => {
             setOpen('');
           }}>
-          <ServerBox data={props.data} />
+          <ServerBox data={store.serverData} />
           <button
             class='whitespace-nowrap'
             onClick={() => {
