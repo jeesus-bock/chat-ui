@@ -21,8 +21,9 @@ export const Login = () => {
         <div class='flex flex-col bg-white shadow-md rounded-lg p-8'>
           <ServerBox data={serverData()} />
           <input
+            autofocus
             placeholder='Nickname...'
-            class='w-48'
+            class='w-48 max-w-full my-4'
             onInput={(e) => {
               setText(e.currentTarget.value);
             }}
@@ -39,7 +40,7 @@ export const Login = () => {
               setNick(text());
               navigate('/chat/main');
             }}
-            class='button'>
+            class='button justify-self-end self-end'>
             Chat
           </button>
         </div>

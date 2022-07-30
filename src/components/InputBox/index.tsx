@@ -5,6 +5,7 @@ export const InputBox: Component<{ room: string; id: string; send: (type: string
   return (
     <div class='w-full flex flex-wrap bg-stone-200 gap-x-4 p-4 border-t border-gray-500'>
       <input
+        autofocus
         data-testid='input'
         class='flex-grow border-stone-600'
         placeholder='type a message...'
