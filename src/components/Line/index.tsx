@@ -1,4 +1,4 @@
-import { Component, Switch, Match } from 'solid-js';
+import { Component, Switch, Match, ErrorBoundary } from 'solid-js';
 import { format } from 'date-fns';
 import type { Msg } from '~/service/ws';
 
@@ -36,12 +36,14 @@ export const Line: Component<{ msg: Msg }> = (p) => {
         </div>
       </Match>
       <Match when={p.msg.type == 'voice'}>
-        <div class='flex gap-4 items-center pl-4'>
-          <label>{getAudioLabel(p.msg.msg)}</label>
-          <audio controls>
-            <source src={p.msg.msg} type='audio/ogg' />
-          </audio>
-        </div>
+        <ErrorBoundary fallback={<div>ERROR</div>}>
+          <div class='flex gap-4 items-center pl-4'>
+            <label>{getAudioLabel(p.msg.msg)}</label>
+            <audio controls>
+              <source src={p.msg.msg} type='audio/ogg' />
+            </audio>
+          </div>
+        </ErrorBoundary>
       </Match>
     </Switch>
   );

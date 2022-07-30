@@ -18,8 +18,10 @@ export const Sidebar: Component<{ data: ServerData }> = (props) => {
           }}
         </For>
       </Show>
-      <input onInput={(e) => setNewChan(e.currentTarget.value)} placeholder='Channel name' />
-      <button onClick={() => navigate('/chat/' + newChan())}>Add channel</button>
+      <input onInput={(e) => setNewChan(e.currentTarget.value)} placeholder='Channel name' class='mx-4 my-4' />
+      <button onClick={() => navigate('/chat/' + newChan())} class='mx-4'>
+        Add channel
+      </button>
     </nav>
   );
 };
