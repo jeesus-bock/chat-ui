@@ -16,15 +16,16 @@
     "solid-app-router": "^0.4.1",
     "solid-js": "beta",
     "solid-meta": "^0.27.3",
-    "solid-start": "beta",
-    "solid-start-node": "beta",
+    "solid-start": "0.1.0-alpha.95",
+    "solid-start-node": "0.1.0-alpha.95",
     "tailwindcss": "latest",
     "typescript": "latest",
-    "undici": "^4.12.2",
+    "undici": "^5",
     "uuid": "^8.3.2",
-    "vite": "^2",
+    "vite": "^3",
     "vite-plugin-inspect": "^0.3.13",
-    "vitest": "^0.6.1"
+    "vitest": "^0.6.1",
+    "rollup": "^2"
   },
   "engines": {
     "node": ">=14"
