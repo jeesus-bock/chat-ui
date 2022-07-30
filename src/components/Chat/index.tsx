@@ -10,19 +10,20 @@ import { Sidebar } from '~/components/Sidebar';
 import { TopicBox } from '~/components/TopicBox';
 
 import { createMemo, createSignal, createResource, createEffect, onMount } from 'solid-js';
-import { nick } from '~/store/store';
+import { store, setStore } from '~/store/store';
 import { UserList } from '~/components/UserList';
 
 export default function Chat() {
   const [msgs, setMsgs] = createStore([] as Array<Msg>);
   const [topic, setTopic] = createSignal('');
   const [users, setUsers] = createSignal([]);
-  const [serverData] = createResource(true, getServer, { deferStream: true });
+  const [serverData] = createResource(getServer);
   createEffect(
     () => serverData(),
     () => {
-      console.log(serverData.loading);
-      console.log(serverData());
+      console.log('serverData.loading', serverData.loading);
+      console.log('serverData()', serverData());
+      setStore({ ...store, serverData: serverData() });
     }
   );
   const id = v4();
@@ -43,7 +44,7 @@ export default function Chat() {
   // Maybe use an effect for this...
   const room = createMemo(() => {
     const rp = useParams();
-    sendWs = initWS(id, rp.room, nick(), (msg: Msg) => {
+    sendWs = initWS(id, rp.room, store.nick, (msg: Msg) => {
       console.log('Got ws msg', msg);
       if (msg.type === 'connected') {
         const data = JSON.parse(msg.msg);
@@ -77,16 +78,17 @@ export default function Chat() {
   // maybe cookies here.
   const navigate = useNavigate();
   onMount(() => {
-    if (!nick()) {
+    if (!store.nick) {
+      console.log('no nick in store', store);
       navigate('/');
     }
   });
 
   return (
     <main class='flex h-full w-full'>
-      <Sidebar data={serverData()} />
+      <Sidebar data={store.serverData} />
       <div class='flex flex-col flex-grow h-full w-full overflow-hidden'>
-        <TopicBox room={room()} topic={topic()} data={serverData()} send={getSendWs()} />
+        <TopicBox room={room()} topic={topic()} data={store.serverData} send={getSendWs()} />
         <Lines msgs={filteredMsgs()} />
         <InputBox room={room()} id={id} send={getSendWs()} />
       </div>

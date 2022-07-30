@@ -1,7 +1,7 @@
 import { useNavigate } from 'solid-app-router';
 import { createEffect, createResource, createSignal, ErrorBoundary } from 'solid-js';
 import { getServer } from '~/service/get_server';
-import { setNick } from '~/store/store';
+import { store, setStore } from '~/store/store';
 import { ServerBox } from '~/components/ServerBox/';
 export const Login = () => {
   console.log('login here');
@@ -9,17 +9,18 @@ export const Login = () => {
   const navigate = useNavigate();
   const [serverData] = createResource(true, getServer, { deferStream: true });
   createEffect(
-    () => serverData(),
+    () => serverData,
     () => {
       console.log(serverData.loading);
-      console.log(serverData());
+      setStore({ ...store, serverData: serverData() });
+      console.log('store', store);
     }
   );
   return (
     <div class='w-full h-full flex flex-col items-center justify-center bg-stone-100'>
       <ErrorBoundary fallback={(err) => <div class='bg-green-100'>{err}</div>}>
         <div class='flex flex-col bg-white shadow-md rounded-lg p-8'>
-          <ServerBox data={serverData()} />
+          <ServerBox data={store.serverData} />
           <input
             autofocus
             placeholder='Nickname...'
@@ -30,14 +31,14 @@ export const Login = () => {
             onkeydown={(e) => {
               console.log(e.key);
               if (e.key == 'Enter') {
-                setNick(text());
+                setStore({ ...store, nick: text() });
                 navigate('/chat/main');
               }
             }}
           />
           <button
             onClick={() => {
-              setNick(text());
+              setStore({ ...store, nick: text() });
               navigate('/chat/main');
             }}
             class='button justify-self-end self-end'>

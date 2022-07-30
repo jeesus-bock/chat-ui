@@ -1,3 +1,3 @@
-import { createSignal } from 'solid-js';
+import { createStore } from 'solid-js/store';
 
-export const [nick, setNick] = createSignal('');
+export const [store, setStore] = createStore({ nick: '', serverData: undefined });

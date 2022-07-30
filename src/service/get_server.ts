@@ -1,8 +1,9 @@
-import { createResource, createEffect } from 'solid-js';
+import { ServerData } from '~/types';
+
 export const chatApiUrl = import.meta.env.VITE_CHAT_API_URL || 'http://127.0.0.1:9393';
 
 // Fetches the server data object
-export const getServer = async () => {
+export const getServer = async (): Promise<ServerData | Error> => {
   const url = chatApiUrl + '/server';
   console.log('Fetching server data', url);
   const data = await fetch(url);
@@ -12,7 +13,7 @@ export const getServer = async () => {
   } catch (_) {
     const msg = await data.text();
     console.log('Server text', msg);
-    return msg;
+    return new Error(msg);
   }
   console.log('Server data', js);
   return js;
