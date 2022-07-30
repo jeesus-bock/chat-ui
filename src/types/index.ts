@@ -7,6 +7,7 @@ export interface User {
 export interface Room {
   name: string;
   topic: string;
+  users: Array<string>;
 }
 
 export interface ServerData {

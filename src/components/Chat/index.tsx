@@ -10,7 +10,7 @@ import { Sidebar } from '~/components/Sidebar';
 import { TopicBox } from '~/components/TopicBox';
 
 import { createMemo, createSignal, createEffect, onMount } from 'solid-js';
-import { store } from '~/store/store';
+import { refetchAllData, store } from '~/store/store';
 import { UserList } from '~/components/UserList';
 
 export default function Chat() {
@@ -45,37 +45,30 @@ export default function Chat() {
         const data = JSON.parse(msg.msg);
         setTopic(data.topic);
         setUsers(data.users || []);
+        refetchAllData();
       }
       if (msg.type === 'topic') {
         setTopic(msg.msg);
         msg.msg = ' changed topic to: ' + msg.msg;
+        refetchAllData();
       }
       if (msg.type === 'leave') {
         // Remove the nick from users()
         setUsers(users().filter((u) => u != msg.msg));
         msg.msg = msg.msg + ' has left the room.';
+        refetchAllData();
       }
       if (msg.type === 'join') {
         // Add the nick to users() unless it's already there
         if (!users().includes(msg.msg)) {
           console.log('adding user', users, msg);
           setUsers([...users(), msg.msg]);
+          refetchAllData();
         }
         msg.msg = msg.msg + ' has joined the room';
       }
       setMsgs([...msgs, msg]);
     });
-  });
-
-  // initialize the navigator to jump back to / if the nick isn't set
-  // TODO make it less harsh, maybe remember the nick?
-  // maybe cookies here.
-  const navigate = useNavigate();
-  onMount(() => {
-    if (!store.nick) {
-      console.log('no nick in store', store);
-      navigate('/');
-    }
   });
 
   return (

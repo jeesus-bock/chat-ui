@@ -1,9 +1,10 @@
 import { useNavigate } from 'solid-app-router';
-import { createSignal, ErrorBoundary } from 'solid-js';
-import { store, setStore } from '~/store/store';
+import { createSignal, ErrorBoundary, Show } from 'solid-js';
 import { ServerBox } from '~/components/ServerBox/';
 import { trimName } from '~/utils/names';
 import { produce } from 'solid-js/store';
+import { setStore, store } from '~/store/store';
+import { isServer } from 'solid-js/web';
 export const Login = () => {
   console.log('Login here');
   const [nick, setNick] = createSignal('');
@@ -22,9 +23,11 @@ export const Login = () => {
   };
   return (
     <div class='w-full h-full flex flex-col items-center justify-center bg-stone-100'>
-      <ErrorBoundary fallback={(err) => <div class='bg-green-100'>{err}</div>}>
+      <ErrorBoundary fallback={(err) => <div class='bg-green-100'>{err.toString()}</div>}>
         <div class='flex flex-col bg-white shadow-md rounded-lg p-8'>
-          <ServerBox data={store.serverData} />
+          <Show when={!isServer}>
+            <ServerBox />
+          </Show>
           <input
             autofocus
             placeholder='Nickname...'

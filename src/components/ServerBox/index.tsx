@@ -1,36 +1,38 @@
-import { Component, For, Show } from 'solid-js';
-import { ServerData } from '~/types';
+import { Component, For, Show, Signal } from 'solid-js';
+import { store } from '~/store/store';
 
-export const ServerBox: Component<{ data: ServerData }> = (p) => {
-  console.log('ServerBox', p ? p.data : 'none');
+export const ServerBox: Component = (p) => {
+  console.log('ServerBox');
   return (
-    <Show when={p && p.data}>
-      <div class='flex flex-col'>
-        <div class='flex justify-between'>
-          <label>Name</label>
-          <span>{p.data.name}</span>
-        </div>
-        <div class='flex justify-between'>
-          <label>Rooms</label>
-          <div class='flex flex-col items-end'>
-            <For each={p.data.rooms.map((u) => u.name)}>
-              {(r) => {
-                return <span>{r}</span>;
-              }}
-            </For>
-          </div>
-        </div>
-        <div class='flex justify-between'>
-          <label>Users</label>
-          <div class='flex flex-col items-end'>
-            <For each={p.data.users.map((u) => u.nick)}>
-              {(u) => {
-                return <span>{u}</span>;
-              }}
-            </For>
-          </div>
+    <div class='flex flex-col'>
+      <div class='flex justify-between'>
+        <label>Name</label>
+        <span>{store.serverData.name}</span>
+      </div>
+      <div class='flex justify-between'>
+        <label>Rooms</label>
+        <div class='flex flex-col items-end'>
+          <For each={store.rooms}>
+            {(r) => {
+              return (
+                <span>
+                  {r.name} ({r.users.length})
+                </span>
+              );
+            }}
+          </For>
         </div>
       </div>
-    </Show>
+      <div class='flex justify-between'>
+        <label>Users</label>
+        <div class='flex flex-col items-end'>
+          <For each={store.users}>
+            {(u) => {
+              return <span>{u.nick}</span>;
+            }}
+          </For>
+        </div>
+      </div>
+    </div>
   );
 };
