@@ -1,19 +1,19 @@
 import { createStore } from 'solid-js/store';
 import { useParams, useNavigate } from 'solid-app-router';
+import { useCtx } from '~/ctx';
 import { v4 } from 'uuid';
 import { initWS } from '~/service/ws';
 import type { Msg } from '~/service/ws';
-import { getServer } from '~/service/get_server';
 import { InputBox } from '~/components/InputBox';
 import { Lines } from '~/components/Lines';
 import { Sidebar } from '~/components/Sidebar';
 import { TopicBox } from '~/components/TopicBox';
 
 import { createMemo, createSignal, createEffect, onMount } from 'solid-js';
-import { refetchAllData, store } from '~/store/store';
 import { UserList } from '~/components/UserList';
 
 export default function Chat() {
+  const [store, { refetchAllData }] = useCtx();
   const [msgs, setMsgs] = createStore([] as Array<Msg>);
   const [topic, setTopic] = createSignal('');
   const [users, setUsers] = createSignal([]);

@@ -1,8 +1,9 @@
 import { Component, For, Show, Signal } from 'solid-js';
-import { store } from '~/store/store';
+import { useCtx } from '~/ctx';
 
 export const ServerBox: Component = (p) => {
-  console.log('ServerBox');
+  const [store] = useCtx();
+  console.log('ServerBox', store);
   return (
     <div class='flex flex-col'>
       <div class='flex justify-between'>
@@ -16,7 +17,8 @@ export const ServerBox: Component = (p) => {
             {(r) => {
               return (
                 <span>
-                  {r.name} ({r.users.length})
+                  {r.name}{' '}
+                  <span class='inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full'>{r.users.length}</span>
                 </span>
               );
             }}

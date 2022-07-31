@@ -3,10 +3,12 @@ import { createSignal, ErrorBoundary, Show } from 'solid-js';
 import { ServerBox } from '~/components/ServerBox/';
 import { trimName } from '~/utils/names';
 import { produce } from 'solid-js/store';
-import { setStore, store } from '~/store/store';
 import { isServer } from 'solid-js/web';
+import { useCtx } from '~/ctx';
+import { ServerData, User, Room } from '~/types';
 export const Login = () => {
-  console.log('Login here');
+  const [store, { setNick: setStoreNick }] = useCtx();
+  console.log('Login here', store);
   const [nick, setNick] = createSignal('');
   const navigate = useNavigate();
   const trimAndSetNick = (n: string) => {
@@ -14,44 +16,38 @@ export const Login = () => {
     setNick(trimName(n));
   };
   const login = () => {
-    setStore(
-      produce((s) => {
-        s.nick = nick();
-      })
-    );
+    setStoreNick(nick());
     navigate('/chat/main');
   };
   return (
     <div class='w-full h-full flex flex-col items-center justify-center bg-stone-100'>
-      <ErrorBoundary fallback={(err) => <div class='bg-green-100'>{err.toString()}</div>}>
-        <div class='flex flex-col bg-white shadow-md rounded-lg p-8'>
-          <Show when={!isServer}>
-            <ServerBox />
-          </Show>
-          <input
-            autofocus
-            placeholder='Nickname...'
-            class='w-48 max-w-full my-4'
-            value={nick()}
-            onInput={(e) => {
-              trimAndSetNick(e.currentTarget.value);
-            }}
-            onkeydown={(e) => {
-              console.log(e.key);
-              if (e.key == 'Enter') {
-                login();
-              }
-            }}
-          />
-          <button
-            onClick={() => {
+      <div class='flex flex-col bg-white shadow-md rounded-lg p-8'>
+        <Show when={store.serverData}>
+          <ServerBox />
+        </Show>
+        <input
+          autofocus
+          placeholder='Nickname...'
+          class='w-48 max-w-full my-4'
+          value={nick()}
+          onInput={(e) => {
+            trimAndSetNick(e.currentTarget.value);
+          }}
+          onkeydown={(e) => {
+            console.log(e.key);
+            if (e.key == 'Enter') {
               login();
-            }}
-            class='button justify-self-end self-end'>
-            Chat
-          </button>
-        </div>
-      </ErrorBoundary>
+            }
+          }}
+        />
+        <button
+          onClick={() => {
+            login();
+          }}
+          class='button justify-self-end self-end'>
+          Chat
+        </button>
+      </div>
     </div>
   );
 };

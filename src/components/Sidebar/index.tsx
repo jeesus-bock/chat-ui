@@ -1,10 +1,11 @@
 import { Link, useNavigate } from 'solid-app-router';
 import { Component, createSignal, For, Show } from 'solid-js';
-import { store } from '~/store/store';
+import { useCtx } from '~/ctx';
 import { trimName } from '~/utils/names';
 
 import { Room } from '~/types/';
 export const Sidebar: Component = () => {
+  const [store] = useCtx();
   const [newRoom, setNewRoom] = createSignal('');
   const navigate = useNavigate();
   const trimSetNewRoom = (room: string) => {
@@ -13,7 +14,7 @@ export const Sidebar: Component = () => {
   return (
     <nav class='hidden sm:flex flex-col h-full bg-zinc-100 border-r border-zinc-500 min-h-screen'>
       <Show when={!store.loading} fallback={<div>Loadind!</div>}>
-        <For each={(store.rooms as Array<Room>).sort((a, b) => a.name.localeCompare(b.name))}>
+        <For each={store.rooms as Array<Room>}>
           {(r) => {
             return (
               <Link href={'/chat/' + r.name} class='pt-2 pb-1 px-4'>
