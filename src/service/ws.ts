@@ -13,28 +13,32 @@ export interface Msg {
 
 let ws: WebSocket;
 
-export const initWS = (id: string, room: string, nick: string, rcv: (e: Msg) => void): ((type: string, msg: string) => void) => {
-  console.log('initing ws, room', room);
+export const initWS = (id: string, nick: string, rcv: (e: Msg) => void, onConn: () => void): ((type: string, msg: string, to: string) => void) => {
+  console.log('initing ws');
   if (isServer) {
     console.log("We're on server, do not start websocket");
     return () => {};
   }
-  if (nick == '') {
-    console.log('No nick set, do not start websocket');
+  if (!nick) {
+    console.log('no nick defined, not starting ws');
     return () => {};
   }
-
-  const wsUrl = chatWSUrl + '/ws/' + id + '/' + room + '?nick=' + nick;
+  const wsUrl = chatWSUrl + '/ws/' + id + '?nick=' + nick;
   console.log('ws url', wsUrl);
   if (ws) ws.close();
   ws = new WebSocket(wsUrl);
   ws.onmessage = (e) => rcv(JSON.parse(e.data));
-  const sendWSMsg = (type: string, msg: string) => {
-    console.log('sendingWSMsg, room', room);
+  ws.onopen = (e) => {
+    onConn();
+    ws.send(JSON.stringify({ type: 'join', to: 'main', from: id, msg: '', ts: Date.now() }));
+  };
+  const sendWSMsg = (type: string, msg: string, to: string) => {
+    console.log('rs', ws.readyState);
+    console.log('sendingWSMsg, to', to);
     if (!type) {
       type = 'msg';
     }
-    const msgObj = { type: type, from: id, to: room, msg: msg, ts: Date.now() };
+    const msgObj = { type: type, from: id, to: to, msg: msg, ts: Date.now() };
     console.log('Sending', msgObj);
     ws.send(JSON.stringify(msgObj));
   };
@@ -42,14 +46,14 @@ export const initWS = (id: string, room: string, nick: string, rcv: (e: Msg) => 
 };
 
 // Possibly usable for testing etc purposes
-export const initMockWS = (room: string, rcv: (e: Msg) => void): ((message: string) => void) => {
+export const initMockWS = (rcv: (e: Msg) => void): ((message: string) => void) => {
   setInterval(() => {
-    const e: Msg = { type: 'msg', from: 'mock_user', to: room, msg: 'This is a test message!', ts: Date.now() };
+    const e: Msg = { type: 'msg', from: 'mock_user', to: 'main', msg: 'This is a test message!', ts: Date.now() };
     rcv(e);
   }, 4000);
   const send = (msg: string) => {
     console.log('WS sending msg', msg);
-    rcv({ type: 'msg', from: 'self', to: room, msg: msg, ts: Date.now() });
+    rcv({ type: 'msg', from: 'self', to: 'main', msg: msg, ts: Date.now() });
   };
   return send;
 };

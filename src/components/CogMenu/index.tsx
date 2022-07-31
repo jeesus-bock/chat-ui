@@ -6,12 +6,10 @@ import { Modal } from '../Modal';
 import { ChangeNick } from '../Modal/content/ChangeNick';
 import { ChangeTopic } from '../Modal/content/ChangeTopic';
 import { ServerBox } from '~/components/ServerBox/';
-import { SendWs, ServerData } from '~/types';
-
-export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) => {
+export const CogMenu: Component = (props) => {
+  console.log(clickOutside);
   const [open, setOpen] = createSignal('');
   const [modal, setModal] = createSignal('');
-  console.log(clickOutside);
   const toggle = (menu: string) => {
     if (open() === menu) {
       setOpen('');
@@ -49,7 +47,7 @@ export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) =>
           use:clickOutside={() => {
             setOpen('');
           }}>
-          <ServerBox data={props.data} />
+          <ServerBox />
           <button
             class='whitespace-nowrap'
             onClick={() => {
@@ -68,7 +66,6 @@ export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) =>
                 close={() => {
                   setModal('');
                 }}
-                send={props.send}
               />
             }
           />
@@ -82,7 +79,6 @@ export const CogMenu: Component<{ data: ServerData; send: SendWs }> = (props) =>
                 close={() => {
                   setModal('');
                 }}
-                send={props.send}
               />
             }
           />

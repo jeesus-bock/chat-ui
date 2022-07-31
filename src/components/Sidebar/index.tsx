@@ -1,27 +1,35 @@
 import { Link, useNavigate } from 'solid-app-router';
 import { Component, createSignal, For, Show } from 'solid-js';
+import { useCtx } from '~/ctx';
+import { trimName } from '~/utils/names';
 
-import { ServerData } from '~/types/';
-export const Sidebar: Component<{ data: ServerData }> = (props) => {
-  const [newChan, setNewChan] = createSignal('');
+import { Room } from '~/types/';
+export const Sidebar: Component = () => {
+  const [store] = useCtx();
+  const [newRoom, setNewRoom] = createSignal('');
   const navigate = useNavigate();
+  const trimSetNewRoom = (room: string) => {
+    setNewRoom(trimName(room));
+  };
   return (
-    <nav class='hidden sm:flex flex-col bg-zinc-100 border-r border-zinc-500 min-h-screen'>
-      <Show when={!!props.data}>
-        <For each={props.data.rooms}>
+    <nav class='hidden sm:flex flex-col h-full bg-zinc-100 border-r border-zinc-500 min-h-screen'>
+      <Show when={!store.loading} fallback={<div>Loadind!</div>}>
+        <For each={store.rooms as Array<Room>}>
           {(r) => {
             return (
-              <Link href={'/chat/' + decodeURI(r.name)} class='pt-2 pb-1 px-4'>
-                {decodeURI(r.name)}
+              <Link href={'/chat/' + r.name} class='pt-2 pb-1 px-4'>
+                {r.name} ({r.users.length})
               </Link>
             );
           }}
         </For>
       </Show>
-      <input onInput={(e) => setNewChan(e.currentTarget.value)} placeholder='Channel name' class='mx-4 my-4' />
-      <button onClick={() => navigate('/chat/' + newChan())} class='mx-4'>
-        Add channel
-      </button>
+      <div class='flex flex-col gap-y-4 justify-self-end'>
+        <input onInput={(e) => trimSetNewRoom(e.currentTarget.value)} value={newRoom()} placeholder='Channel name' class='mx-4 mt-auto' />
+        <button onClick={() => navigate('/chat/' + newRoom())} class='mx-4'>
+          Add channel
+        </button>
+      </div>
     </nav>
   );
 };

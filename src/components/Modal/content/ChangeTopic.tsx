@@ -1,7 +1,12 @@
 import { Component, createSignal } from 'solid-js';
-import { SendWs } from '~/types';
-export const ChangeTopic: Component<{ close: () => void; send: SendWs }> = (p) => {
+import { useCtx } from '~/ctx';
+export const ChangeTopic: Component<{ close: () => void }> = (p) => {
   const [topic, setTopic] = createSignal('');
+  const [store] = useCtx();
+  const changeTopic = () => {
+    store.sendWs('topic', topic(), store.room);
+    p.close();
+  };
   return (
     <div class='flex flex-col w-96'>
       <label class='mb-4'>Change topic</label>
@@ -10,8 +15,7 @@ export const ChangeTopic: Component<{ close: () => void; send: SendWs }> = (p) =
         onInput={(e) => setTopic(e.currentTarget.value)}
         onkeydown={(e) => {
           if (e.key == 'Enter') {
-            p.send('topic', topic());
-            p.close();
+            changeTopic();
           }
         }}
       />
@@ -19,8 +23,7 @@ export const ChangeTopic: Component<{ close: () => void; send: SendWs }> = (p) =
         <button onClick={() => p.close()}>Cancel</button>
         <button
           onClick={() => {
-            p.send('topic', topic());
-            p.close();
+            changeTopic();
           }}>
           OK
         </button>
