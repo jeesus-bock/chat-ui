@@ -2,18 +2,14 @@ import { Component, createSignal, Show } from 'solid-js';
 import { mdiAccount, mdiCog } from '@mdi/js';
 import { Portal } from 'solid-js/web';
 import { clickOutside } from '~/directives/click-outside';
-import { useCtx } from '~/ctx';
 import { Modal } from '../Modal';
 import { ChangeNick } from '../Modal/content/ChangeNick';
 import { ChangeTopic } from '../Modal/content/ChangeTopic';
 import { ServerBox } from '~/components/ServerBox/';
-import { SendWs } from '~/types';
-
-export const CogMenu: Component<{ send: SendWs }> = (props) => {
+export const CogMenu: Component = (props) => {
+  console.log(clickOutside);
   const [open, setOpen] = createSignal('');
   const [modal, setModal] = createSignal('');
-  console.log(clickOutside);
-  const [store] = useCtx();
   const toggle = (menu: string) => {
     if (open() === menu) {
       setOpen('');
@@ -70,7 +66,6 @@ export const CogMenu: Component<{ send: SendWs }> = (props) => {
                 close={() => {
                   setModal('');
                 }}
-                send={props.send}
               />
             }
           />
@@ -84,7 +79,6 @@ export const CogMenu: Component<{ send: SendWs }> = (props) => {
                 close={() => {
                   setModal('');
                 }}
-                send={props.send}
               />
             }
           />

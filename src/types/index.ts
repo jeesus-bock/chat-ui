@@ -15,8 +15,6 @@ export interface ServerData {
   type: string;
   url: string;
   voiceUrl: string;
-  users: Array<User>;
-  rooms: Array<Room>;
 }
 
-export type SendWs = (type: string, msg: string) => void;
+export type SendWs = (type: string, msg: string, to: string) => void;

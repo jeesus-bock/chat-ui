@@ -1,17 +1,20 @@
-import { createSignal, createContext, useContext, createResource, Context } from 'solid-js';
+import { createSignal, createContext, useContext, createResource, Context, createEffect } from 'solid-js';
 import { produce } from 'solid-js/store';
 import { createStore } from 'solid-js/store';
 import { getServer } from '~/service/get_server';
 import { getUsers } from '~/service/get_users';
 import { getRooms } from '~/service/get_rooms';
-
-import { ServerData, Room, User } from '~/types';
+import { initWS } from '~/service/ws';
+import type { Msg } from '~/service/ws';
+import { ServerData, Room, User, SendWs } from '~/types';
+import { v4 } from 'uuid';
 const RootContext = createContext();
 
 export function CtxProvider(props) {
   const [serverData, { refetch: rfServer }] = createResource(getServer);
   const [users, { refetch: rfUsers }] = createResource(getUsers);
   const [rooms, { refetch: rfRooms }] = createResource(getRooms);
+  const [msgs, setMsgs] = createStore([] as Array<Msg>);
 
   const refetchAllData = () => {
     console.log('refetching all data');
@@ -21,6 +24,11 @@ export function CtxProvider(props) {
   };
   const [store, setStore] = createStore({
     nick: '',
+    room: 'main',
+    sendWs: null,
+    wsState: 0,
+    id: v4(),
+    historyLoading: new Map<string, boolean>(),
     get serverData() {
       return serverData();
     },
@@ -33,6 +41,9 @@ export function CtxProvider(props) {
     get loading() {
       return serverData.loading || rooms.loading || users.loading;
     },
+    get msgs() {
+      return msgs || [];
+    },
   });
   const setNick = (n: string) => {
     setStore(
@@ -41,12 +52,51 @@ export function CtxProvider(props) {
       })
     );
   };
+  const setRoom = (r: string) => {
+    setStore(
+      produce((s) => {
+        s.room = r;
+      })
+    );
+  };
+  const setSendWs = (fn: SendWs) => {
+    setStore(
+      produce((s) => {
+        s.sendWs = fn;
+      })
+    );
+  };
+  const setWsState = (state: number) => {
+    setStore(
+      produce((s) => {
+        s.wsState = state;
+      })
+    );
+  };
+  const setHistoryLoading = (room: string, loading: boolean) => {
+    setStore(
+      produce((s) => {
+        s.historyLoading.set(room, loading);
+      })
+    );
+  };
+
+  // Create the websocket sender function to share on context
+  let sendWs: Function;
+  const getSendWs = () => {
+    return sendWs;
+  };
   const state = [
     store,
     {
       refetchAllData,
       setStore,
       setNick,
+      setRoom,
+      setMsgs,
+      setSendWs,
+      setWsState,
+      setHistoryLoading,
     },
   ];
 
@@ -60,6 +110,12 @@ export function useCtx(): State {
 type State = [
   {
     nick: string;
+    room: string;
+    id: string;
+    historyLoading: Map<string, boolean>;
+    sendWs: SendWs;
+    wsState: number;
+    readonly msgs: Msg[];
     readonly serverData: ServerData;
     readonly rooms: Room[];
     readonly users: User[];
@@ -69,5 +125,10 @@ type State = [
     refetchAllData: () => void;
     setStore: any;
     setNick: (n: string) => void;
+    setRoom: (r: string) => void;
+    setMsgs: any;
+    setSendWs: (fn: SendWs) => void;
+    setWsState: (state: number) => void;
+    setHistoryLoading: (room: string, loading: boolean) => void;
   }
 ];

@@ -1,10 +1,16 @@
 import { Component, createSignal } from 'solid-js';
-import { SendWs } from '~/types';
 import { trimName } from '~/utils/names';
-export const ChangeNick: Component<{ close: () => void; send: SendWs }> = (p) => {
+import { useCtx } from '~/ctx';
+export const ChangeNick: Component<{ close: () => void }> = (p) => {
   const [nick, setNick] = createSignal('');
+  const [store] = useCtx();
+
   const trimAndSetNick = (n: string) => {
     setNick(trimName(n));
+  };
+  const changeNick = () => {
+    store.sendWs('nick', nick(), '*');
+    p.close();
   };
   return (
     <div class='flex flex-col'>
@@ -15,8 +21,7 @@ export const ChangeNick: Component<{ close: () => void; send: SendWs }> = (p) =>
         value={nick()}
         onkeydown={(e) => {
           if (e.key == 'Enter') {
-            p.send('nick', nick());
-            p.close();
+            changeNick();
           }
         }}
       />
@@ -24,8 +29,7 @@ export const ChangeNick: Component<{ close: () => void; send: SendWs }> = (p) =>
         <button onClick={() => p.close()}>Cancel</button>
         <button
           onClick={() => {
-            p.send('nick', nick());
-            p.close();
+            changeNick();
           }}>
           OK
         </button>
