@@ -11,7 +11,7 @@ describe('<Line />', () => {
 
   test('present message data', async () => {
     const { queryByTestId, unmount } = render(() => <Line msg={{ type: 'msg', from: 'mock_user', to: 'mock_room', msg: 'This is a test message!', ts: 165789872275 }} />);
-    expect(queryByTestId('ts')).toHaveTextContent('10:44:32 PM');
+    expect(queryByTestId('ts')).toHaveTextContent('10:44');
     expect(queryByTestId('from')).toHaveTextContent('mock_user');
     expect(queryByTestId('msg')).toHaveTextContent('This is a test message!');
   });

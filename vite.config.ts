@@ -25,7 +25,6 @@ export default defineConfig({
   plugins: [solid()],
   build: {
     target: 'esnext',
-    polyfillDynamicImport: false,
   },
   resolve: {
     conditions: ['development', 'browser'],

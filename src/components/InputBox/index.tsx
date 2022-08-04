@@ -4,7 +4,8 @@ import { SendWs } from '~/types';
 import { AudioRec } from '../AudioRec';
 export const InputBox: Component<{ room: string }> = (p) => {
   const [text, setText] = createSignal('');
-  const [store] = useCtx();
+  const [store] = useCtx() || [{ sendWs: () => {}, id: '0-0-0-0' }];
+  console.log('InputBox store:', store);
   return (
     <div class='w-full flex flex-wrap bg-stone-200 gap-x-4 p-4 border-t border-gray-500'>
       <input

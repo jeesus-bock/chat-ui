@@ -42,7 +42,7 @@ export default function Chat() {
         <Lines msgs={filteredMsgs()} />
         <InputBox room={rp.room} />
       </div>
-      <UserList users={users()} />
+      <UserList />
     </main>
   );
 }

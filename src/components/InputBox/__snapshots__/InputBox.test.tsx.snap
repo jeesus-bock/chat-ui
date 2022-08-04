@@ -3,9 +3,10 @@
 exports[`<InputBox /> > renders 1`] = `
 <div>
   <div
-    class="w-full flex bg-stone-200 gap-x-4 p4"
+    class="w-full flex flex-wrap bg-stone-200 gap-x-4 p-4 border-t border-gray-500"
   >
     <input
+      autofocus=""
       class="flex-grow border-stone-600"
       data-testid="input"
       placeholder="type a message..."
@@ -15,6 +16,9 @@ exports[`<InputBox /> > renders 1`] = `
     >
       Send
     </button>
+    <!--#-->
+    
+    <!--/-->
   </div>
 </div>
 `;

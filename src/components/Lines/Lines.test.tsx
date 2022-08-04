@@ -16,7 +16,7 @@ describe('<Lines />', () => {
   test('presents messages data', async () => {
     const { queryAllByTestId, unmount } = render(() => <Lines msgs={testMsgs} />);
     const tids = queryAllByTestId('ts');
-    expect(tids[0]).toHaveTextContent('10:44:32 PM');
-    expect(tids[1]).toHaveTextContent('1:30:27 AM');
+    expect(tids[0]).toHaveTextContent('10:44');
+    expect(tids[1]).toHaveTextContent('1:30');
   });
 });

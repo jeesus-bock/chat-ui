@@ -7,38 +7,54 @@ exports[`<Lines /> > renders 1`] = `
     data-testid="lines"
   >
     <div
-      class="grid _cols_1tvt2_1"
+      class="flex px-4 _cols_cesd7_1 grid"
     >
       <span
+        class="inline-block pr-4 mr-4 border-r"
         data-testid="ts"
       >
-        10:44:32 PM
+        10:44
       </span>
       <span
+        class="ml-2 pr-4 mr-4 border-r ml-0"
         data-testid="from"
       >
+        <!--#-->
         mock_user
+        <!--/-->
+        <!--#-->
+        
+        <!--/-->
       </span>
       <span
+        class="ml-2 ml-0 border-r"
         data-testid="msg"
       >
         This is a test message!
       </span>
     </div>
     <div
-      class="grid _cols_1tvt2_1"
+      class="flex px-4 _cols_cesd7_1 grid"
     >
       <span
+        class="inline-block pr-4 mr-4 border-r"
         data-testid="ts"
       >
-        1:30:27 AM
+        01:30
       </span>
       <span
+        class="ml-2 pr-4 mr-4 border-r ml-0"
         data-testid="from"
       >
+        <!--#-->
         mock_user2
+        <!--/-->
+        <!--#-->
+        
+        <!--/-->
       </span>
       <span
+        class="ml-2 ml-0 border-r"
         data-testid="msg"
       >
         This is a test message2!

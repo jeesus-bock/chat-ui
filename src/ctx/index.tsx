@@ -4,10 +4,9 @@ import { createStore } from 'solid-js/store';
 import { getServer } from '~/service/get_server';
 import { getUsers } from '~/service/get_users';
 import { getRooms } from '~/service/get_rooms';
-import { initWS } from '~/service/ws';
 import type { Msg } from '~/service/ws';
 import { ServerData, Room, User, SendWs } from '~/types';
-import { v4 } from 'uuid';
+import { v4 } from '@lukeed/uuid';
 const RootContext = createContext();
 
 export function CtxProvider(props) {
@@ -25,7 +24,9 @@ export function CtxProvider(props) {
   const [store, setStore] = createStore({
     nick: '',
     room: 'main',
-    sendWs: null,
+    sendWs: (type: string, msg: string, to: string) => {
+      console.log('no-op ws send: ', type, msg, to);
+    },
     wsState: 0,
     id: v4(),
     historyLoading: new Map<string, boolean>(),
