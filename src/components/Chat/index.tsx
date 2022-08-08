@@ -18,8 +18,8 @@ export default function Chat() {
       if (r.name == rp.room) {
         return r.topic;
       }
-      return 'No topic set';
     }
+    return 'No topic set';
   });
   const users = createMemo(() => {
     for (const r of store.rooms) {

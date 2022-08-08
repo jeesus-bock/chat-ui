@@ -1,4 +1,4 @@
-import { createSignal, createContext, useContext, createResource, Context, createEffect } from 'solid-js';
+import { createContext, useContext, createResource, Context, createEffect } from 'solid-js';
 import { produce } from 'solid-js/store';
 import { createStore } from 'solid-js/store';
 import { getServer } from '~/service/get_server';
@@ -14,6 +14,8 @@ export function CtxProvider(props) {
   const [users, { refetch: rfUsers }] = createResource(getUsers);
   const [rooms, { refetch: rfRooms }] = createResource(getRooms);
   const [msgs, setMsgs] = createStore([] as Array<Msg>);
+
+  //const serverData = createServerData(getServer);
 
   const refetchAllData = () => {
     console.log('refetching all data');
@@ -83,10 +85,7 @@ export function CtxProvider(props) {
   };
 
   // Create the websocket sender function to share on context
-  let sendWs: Function;
-  const getSendWs = () => {
-    return sendWs;
-  };
+
   const state = [
     store,
     {

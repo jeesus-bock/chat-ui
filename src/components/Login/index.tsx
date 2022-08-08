@@ -1,31 +1,49 @@
 import { useNavigate } from 'solid-app-router';
-import { createResource, createSignal, ErrorBoundary, Show } from 'solid-js';
+import { createMemo, createResource, createSignal, ErrorBoundary, Show } from 'solid-js';
 import { ServerBox } from '~/components/ServerBox/';
 import { trimName } from '~/utils/names';
 import { useCtx } from '~/ctx';
+import { refetchRouteData } from 'solid-start/data/createRouteData';
+import { mdiRefresh } from '@mdi/js';
 
 export const Login = () => {
-  const [store, { setNick: setStoreNick }] = useCtx();
-  console.log('Login here', store);
+  const [store, { setNick: setStoreNick, refetchAllData }] = useCtx();
   const [nick, setNick] = createSignal('');
+
   const navigate = useNavigate();
-  const [waiting] = createResource(() => new Promise((res) => setTimeout(res, 2000)));
   const trimAndSetNick = (n: string) => {
-    console.log('trimmed', trimName(n));
     setNick(trimName(n));
   };
+
   const login = () => {
+    console.log('Login/login()');
     setStoreNick(nick());
     console.log('Navigating to chat, nick: ', nick());
     navigate('/chat/main');
   };
+  const serverBox = createMemo(() => {
+    console.log('returning serverbox');
+    if (store && store.serverData) {
+      return <ServerBox />;
+    } else {
+      return <div>else</div>;
+    }
+  });
   return (
     <div class='w-full h-full flex flex-col items-center justify-center bg-stone-100'>
-      <div class='flex flex-col bg-white shadow-md rounded-lg p-8'>
-        <Show when={store.serverData}>
-          {JSON.stringify(waiting())}
-          <ServerBox />
-        </Show>
+      <div class='flex flex-col bg-white shadow-md rounded-lg p-8 relative'>
+        <div class='absolute right-0 top-2'>
+          <svg
+            class='w-8 h-8 fill-gray-300 cursor-pointer'
+            onClick={() => {
+              console.log('got click', store);
+              refetchAllData();
+              refetchRouteData();
+            }}>
+            <path d={mdiRefresh} />
+          </svg>
+        </div>
+        {serverBox()}
         <input
           autofocus
           placeholder='Nickname...'

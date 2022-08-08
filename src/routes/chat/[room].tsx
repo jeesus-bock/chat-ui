@@ -4,7 +4,7 @@ import { useCtx } from '~/ctx';
 import { initWS } from '~/service/ws';
 import { Msg } from '~/service/ws';
 import { isServer } from 'solid-js/web';
-import { createEffect } from 'solid-js';
+import { createEffect, onMount } from 'solid-js';
 // Very basic view, maybe add conditional page about room info or something here later.
 export default function Room() {
   const [store, { setMsgs, setSendWs, setWsState, refetchAllData, setHistoryLoading, setRoom }] = useCtx();
@@ -19,7 +19,9 @@ export default function Room() {
     return;
   }
   console.log('Room() setting sendWS', store.nick);
-  if (!isServer) {
+
+  if (!isServer && !store.wsState) {
+    console.log('[room].tsx creating ws');
     setSendWs(
       initWS(
         store.id,

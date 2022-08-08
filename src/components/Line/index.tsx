@@ -1,10 +1,20 @@
-import { Component, Switch, Match, ErrorBoundary } from 'solid-js';
+import { Component, Switch, Match, ErrorBoundary, createResource, createEffect } from 'solid-js';
 import { format } from 'date-fns';
 import type { Msg } from '~/service/ws';
 
 import * as lineCss from './Line.module.css';
 
 export const Line: Component<{ msg: Msg }> = (p) => {
+  let handlers = { onLoad: (v: any) => {}, onError: (v: any) => {} };
+  const [audioLoad] = createResource(
+    () =>
+      new Promise((onLoad, onError) => {
+        handlers = { onLoad, onError };
+      })
+  );
+
+  createEffect(audioLoad);
+
   const getAudioLabel = (msg: string) => {
     const arr1 = msg.split('/');
     console.log(arr1);
@@ -35,15 +45,21 @@ export const Line: Component<{ msg: Msg }> = (p) => {
           --- CONNECTED TO <span class='font-bold'>{decodeURI(p.msg.to)}</span> ---
         </div>
       </Match>
+      <Match when={p.msg.type == 'end_history'}>
+        <span>{format(new Date(p.msg.ts), 'hh:mm')} End history</span>
+      </Match>
+      <Match when={p.msg.type == 'start_history'}>
+        <span>{format(new Date(p.msg.ts), 'hh:mm')} Start history</span>
+      </Match>
       <Match when={p.msg.type == 'voice'}>
-        <ErrorBoundary fallback={<div>ERROR</div>}>
-          <div class='flex gap-4 items-center pl-4'>
-            <label>{getAudioLabel(p.msg.msg)}</label>
-            <audio controls>
-              <source src={p.msg.msg} type='audio/ogg' />
-            </audio>
-          </div>
-        </ErrorBoundary>
+        <div class='flex gap-4 items-center pl-4'>
+          <label>
+            {getAudioLabel(p.msg.msg)} {JSON.stringify(audioLoad)}
+          </label>
+          <audio controls onError={() => {}}>
+            <source src={p.msg.msg} type='audio/ogg' onError={() => {}} />
+          </audio>
+        </div>
       </Match>
     </Switch>
   );

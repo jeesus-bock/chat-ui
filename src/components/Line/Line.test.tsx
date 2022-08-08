@@ -14,5 +14,6 @@ describe('<Line />', () => {
     expect(queryByTestId('ts')).toHaveTextContent('10:44');
     expect(queryByTestId('from')).toHaveTextContent('mock_user');
     expect(queryByTestId('msg')).toHaveTextContent('This is a test message!');
+    unmount();
   });
 });
